@@ -1,6 +1,5 @@
-const { React, getModule } = require("@vizality/webpack");
-const { Button, FormTitle } = require("@vizality/components");
-const { Modal } = require("@vizality/components");
+import { React, getModule } from "@vizality/webpack";
+import { Button, FormTitle, Modal } from "@vizality/components"
 const { close: closeModal } = require("@vizality/modal");
 const { addReaction } = getModule("addReaction", false);
 const { getMessage } = getModule("getMessages", false);

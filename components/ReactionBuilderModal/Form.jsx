@@ -1,5 +1,6 @@
-const { React, getModule, getModuleByDisplayName, } = require("@vizality/webpack");
-const { Divider, FormTitle, settings: { TextInput, SwitchItem } } = require("@vizality/components");
+import { React, getModule, getModuleByDisplayName, } from "@vizality/webpack"
+import { Divider, FormTitle } from "@vizality/components"
+import { TextInput, SwitchItem } from "@vizality/components/settings"
 const { close: closeModal } = require("@vizality/modal");
 const Reactions = getModuleByDisplayName("Reactions", false);
 const margins = getModule("marginTop20", false);

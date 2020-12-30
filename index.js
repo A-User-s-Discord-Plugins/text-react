@@ -1,9 +1,9 @@
-const { Plugin } = require("@vizality/entities");
-const { React } = require("@vizality/react");
-const { react:{ findInReactTree } } = require('@vizality/util');
-const { getModule } = require("@vizality/webpack");
-const { open: openModal } = require("@vizality/modal");
-const { patch, unpatch } = require("@vizality/patcher");
+import  { Plugin } from "@vizality/core"
+import { React } from "@vizality/react"
+import { findInReactTree } from '@vizality/util/react'
+import { getModule } from "@vizality/webpack"
+import { patch, unpatch } from "@vizality/patcher";
+const { open: openModal } = require("@vizality/modal"); // can i just left as cjs here? i dont like to use @vizality/modal/open
 
 const { getSetting, toggleSetting, updateSetting } = vizality.api.settings._fluxProps(this.addonId)
 
