@@ -1,19 +1,20 @@
-const { Plugin } = require("powercord/entities");
-const { React, getModule } = require("powercord/webpack");
-const { open: openModal } = require("powercord/modal");
-const { findInReactTree } = require("powercord/util");
-const { inject, uninject } = require("powercord/injector");
+const { Plugin } = require("@vizality/entities");
+const { React } = require("@vizality/react");
+const { react:{ findInReactTree } } = require('@vizality/util');
+const { getModule } = require("@vizality/webpack");
+const { open: openModal } = require("@vizality/modal");
+const { patch, unpatch } = require("@vizality/patcher");
+
+const { getSetting, toggleSetting, updateSetting } = vizality.api.settings._fluxProps(this.addonId)
+
 const ReactionBuilderModal = require("./components/ReactionBuilderModal");
-const MiniPopover = getModule(
-	(m) => m.default && m.default.displayName === "MiniPopover",
-	false
-);
+const MiniPopover = getModule((m) => m.default && m.default.displayName === "MiniPopover",false);
 const TextReactButton = require("./components/TextReactButton")(MiniPopover);
-const { getMessage, getMessages } = getModule(["getMessages"], false);
-const { getChannel } = getModule(["getChannel"], false);
-const { getChannelId } = getModule(["getLastSelectedChannelId"], false);
-const DiscordPermissions = getModule(["Permissions"], false).Permissions;
-const Permissions = getModule(["getHighestRole"], false);
+const { getMessage, getMessages } = getModule("getMessages", false);
+const { getChannel } = getModule("getChannel", false);
+const { getChannelId } = getModule("getLastSelectedChannelId", false);
+const DiscordPermissions = getModule("Permissions", false).Permissions;
+const Permissions = getModule("getHighestRole", false);
 
 const reactions = {
 	multiple: {
@@ -51,17 +52,17 @@ const reactions = {
 		f: ["🇫"],
 		g: ["🇬"],
 		h: ["🇭", "♓"],
-		i: ["🇮", "ℹ"],
+		i: ["🇮", "ℹ", "1️⃣"],
 		j: ["🇯"],
 		k: ["🇰"],
-		l: ["🇱"],
+		l: ["🇱", "1️⃣"],
 		m: ["🇲", "Ⓜ️", "♏", "♍"],
 		n: ["🇳", "♑"],
 		o: ["🇴", "🅾", "⭕"],
 		p: ["🇵", "🅿"],
 		q: ["🇶"],
 		r: ["🇷", "®"],
-		s: ["🇸"],
+		s: ["🇸", "5️⃣"],
 		t: ["🇹", "✝️"],
 		u: ["🇺"],
 		v: ["🇻", "♈"],
@@ -74,7 +75,7 @@ const reactions = {
 		2: ["2️⃣"],
 		3: ["3️⃣"],
 		4: ["4️⃣"],
-		5: ["5️⃣"],
+		5: ["5️⃣", "🇸"],
 		6: ["6️⃣"],
 		7: ["7️⃣"],
 		8: ["8️⃣"],
@@ -103,10 +104,12 @@ for (let i = 0; i < Object.keys(reactions.single).length; i++) {
 }
 
 module.exports = class TextReact extends Plugin {
-	async startPlugin() {
-		this.loadStylesheet("style.css");
+	async onStart() {
+		this.injectStyles("style.css");
 
-		inject("text-react", MiniPopover, "default", (_, res) => {
+		if (typeof getSetting("preferMultiple") === undefined) updateSetting("preferMultiple", true)
+
+		patch("text-react", MiniPopover, "default", (_, res) => {
 			const props = findInReactTree(
 				res,
 				(r) => r && r.canReact && r.message
@@ -130,9 +133,9 @@ module.exports = class TextReact extends Plugin {
 		});
 		MiniPopover.default.displayName = "MiniPopover";
 
-		powercord.api.commands.registerCommand({
+		vizality.api.commands.registerCommand({
 			command: "react",
-			aliases: [],
+			aliases: ["rct"],
 			description: "React on a message with regional indicators",
 			usage: "{c} [message id] [channel id]",
 			executor: async (args) => {
@@ -177,9 +180,9 @@ module.exports = class TextReact extends Plugin {
 		});
 	}
 
-	pluginWillUnload() {
-		uninject("text-react");
-		powercord.api.commands.unregisterCommand("react");
+	onStop() {
+		unpatch("text-react");
+		vizality.api.commands.unregisterCommand("react");
 		document.querySelectorAll(".text-react-button").forEach(e => e.style.display = "none");
 	}
 

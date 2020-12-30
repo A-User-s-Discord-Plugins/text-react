@@ -1,16 +1,24 @@
-const {
-	React,
-	getModule,
-	getModuleByDisplayName,
-} = require("powercord/webpack");
-const {
-	Divider,
-	FormTitle,
-	settings: { TextInput, SwitchItem },
-} = require("powercord/components");
-const { close: closeModal } = require("powercord/modal");
+const { React, getModule, getModuleByDisplayName, } = require("@vizality/webpack");
+const { Divider, FormTitle, settings: { TextInput, SwitchItem } } = require("@vizality/components");
+const { close: closeModal } = require("@vizality/modal");
 const Reactions = getModuleByDisplayName("Reactions", false);
-const margins = getModule(["marginTop20"], false);
+const margins = getModule("marginTop20", false);
+
+const { toggleSetting } = vizality.api.settings._fluxProps(this.addonId)
+
+const examples = [
+	"emma is a cutie",
+	"bruh",
+	"yes",
+	"free minecraft",
+	"cute owo",
+	"nsfw ban",
+	"gay",
+	"too cute",
+	"banned"
+]
+
+var randomExample = examples[Math.floor(Math.random() * examples.length)]
 
 class Form extends React.PureComponent {
 	render() {
@@ -23,7 +31,7 @@ class Form extends React.PureComponent {
 				<FormTitle tag="h5">Reaction Text</FormTitle>
 				<TextInput
 					autoFocus
-					note="Example: emmaiscute"
+					note={`Example: ${randomExample}`}
 					error={this.props.error}
 					value={this.props.text}
 					onInput={(event) => {
@@ -55,6 +63,7 @@ class Form extends React.PureComponent {
 					value={this.props.preferMultiple}
 					onChange={(event) => {
 						this.props.setPreferMultiple(event);
+						toggleSetting('preferMultiple');
 					}}
 				/>
 				<FormTitle tag="h5" className={margins.marginTop8}>

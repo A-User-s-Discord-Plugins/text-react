@@ -1,11 +1,12 @@
-const { React, getModule } = require("powercord/webpack");
-const { Button } = require("powercord/components");
-const { Modal } = require("powercord/components/modal");
-const { FormTitle } = require("powercord/components");
-const { close: closeModal } = require("powercord/modal");
-const { addReaction } = getModule(["addReaction"], false);
-const { getMessage } = getModule(["getMessages"], false);
+const { React, getModule } = require("@vizality/webpack");
+const { Button, FormTitle } = require("@vizality/components");
+const { Modal } = require("@vizality/components");
+const { close: closeModal } = require("@vizality/modal");
+const { addReaction } = getModule("addReaction", false);
+const { getMessage } = getModule("getMessages", false);
 const Form = require("./Form");
+
+const { getSetting } = vizality.api.settings._fluxProps(this.addonId)
 
 class ReactionBuilderModal extends React.PureComponent {
 	constructor(props) {
@@ -17,7 +18,7 @@ class ReactionBuilderModal extends React.PureComponent {
 			error: "",
 			message: this.props.message,
 			reacting: false,
-			preferMultiple: true,
+			preferMultiple: getSetting("preferMultiple", true),
 		};
 	}
 
@@ -88,7 +89,7 @@ class ReactionBuilderModal extends React.PureComponent {
 
 	render() {
 		return (
-			<Modal className="powercord-text" size={Modal.Sizes.LARGE}>
+			<Modal className="powercord-text" size={Modal.Sizes.MEDIUM}>
 				<Modal.Header>
 					<FormTitle tag="h3">React to Message</FormTitle>
 					<Modal.CloseButton onClick={closeModal} />
@@ -117,7 +118,7 @@ class ReactionBuilderModal extends React.PureComponent {
 								await this.react(this.state.emojiData);
 								try {
 									closeModal();
-								} catch (e) {}
+								} catch (e) {console.error("Failed to close the modal!" + e)}
 							}
 						}}
 					>

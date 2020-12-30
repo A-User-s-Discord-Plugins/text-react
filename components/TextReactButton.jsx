@@ -1,8 +1,7 @@
-const { getModule, getModuleByDisplayName, React } = require("powercord/webpack");
-const { open: openModal } = require("powercord/modal");
+const { getModule, getModuleByDisplayName, React } = require("@vizality/webpack");
+const { open: openModal } = require("@vizality/modal");
 const Tooltip = getModuleByDisplayName("Tooltip", false);
 const ReactionBuilderModal = require("./ReactionBuilderModal");
-const classes = getModule(["icon", "isHeader"], false);
 
 module.exports = ({ Button }) => class TextReactButton extends React.Component {
 	render() {
@@ -20,7 +19,7 @@ module.exports = ({ Button }) => class TextReactButton extends React.Component {
 					onMouseLeave={onMouseLeave}
 				>
 					<img
-						className={`emoji ${classes.icon}`}
+						className={`emoji ${getModule("icon", "isHeader", false).icon}`}
 						src="/assets/bbe8ae762f831966587a35010ed46f67.svg"
 					/>
 				</Button>}
