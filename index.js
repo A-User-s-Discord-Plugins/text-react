@@ -1,7 +1,6 @@
-import  { Plugin } from "@vizality/core"
-import { React } from "@vizality/react"
+import { Plugin } from "@vizality/entities"
 import { findInReactTree } from '@vizality/util/react'
-import { getModule } from "@vizality/webpack"
+import { React, getModule } from "@vizality/webpack"
 import { patch, unpatch } from "@vizality/patcher";
 const { open: openModal } = require("@vizality/modal"); // can i just left as cjs here? i dont like to use @vizality/modal/open
 
@@ -104,7 +103,7 @@ for (let i = 0; i < Object.keys(reactions.single).length; i++) {
 }
 
 module.exports = class TextReact extends Plugin {
-	async onStart() {
+	async start() {
 		this.injectStyles("style.css");
 
 		if (typeof getSetting("preferMultiple") === undefined) updateSetting("preferMultiple", true)
@@ -180,7 +179,7 @@ module.exports = class TextReact extends Plugin {
 		});
 	}
 
-	onStop() {
+	stop() {
 		unpatch("text-react");
 		vizality.api.commands.unregisterCommand("react");
 		document.querySelectorAll(".text-react-button").forEach(e => e.style.display = "none");

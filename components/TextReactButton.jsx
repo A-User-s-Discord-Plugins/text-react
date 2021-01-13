@@ -1,4 +1,4 @@
-import { getModule, getModuleByDisplayName, React } from "@vizality/webpack"
+import { getModule, getModuleByDisplayName, React } from "@vizality/webpack";
 const { open: openModal } = require("@vizality/modal");
 const Tooltip = getModuleByDisplayName("Tooltip", false);
 const ReactionBuilderModal = require("./ReactionBuilderModal");
